@@ -27,11 +27,11 @@ $ProxyFunc = {
 		try {
 			while ($true) {
 				try {
-					$x = netstat -ano | findstr "LISTEN" | findstr "50108" 
+					$x = netstat -ano | findstr "LISTEN" | findstr "9090" 
 					#if ((Test-NetConnection -ComputerName '127.0.0.1' -Port 50108).TcpTestSucceeded) {
-					if($null -ne $x){
+					if ($null -ne $x) {
 						if ($status -eq 0) {
-							Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings' -name ProxyServer -Value "socks=127.0.0.1:50108"
+							Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings' -name ProxyServer -Value "socks=127.0.0.1:9090"
 							Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings' -name ProxyOverride -Value "192.168.*.*;10.*.*.*;172.*.*.*;127.*.*.*;::1"
 							Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings' -name ProxyEnable -Value 1
 							$wshell.Popup("Secure Tunnel is running now!!", 5, "Secure Tunnel", 0x0 + 0x20)
@@ -42,7 +42,7 @@ $ProxyFunc = {
 					else {
 						$status = 0
 						$ssh_job = Start-Job -ScriptBlock { 
-							ssh -i C:\Users\m_ali\.ssh\id_rsa -D 50108 -q -C -N -f root@104.248.136.75
+							ssh -i $env:USERPROFILE\.ssh\id_rsa -D 9090 -q -C -N -f root@165.227.128.109
 						}
 						$wshell.Popup("Starting The App...", 5, "Secure Tunnel", 0x0 + 0x20);
 						Start-Sleep 5
